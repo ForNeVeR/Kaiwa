@@ -27,7 +27,7 @@ block scripts
     script(src="config.js")
     script(src="js/login.js")
     script.
-        if ("#{config.server.wss}".length == 0) {
+        if ("#{require('./dev_config.json').server.wss}".length == 0) {
             document.getElementsByClassName('fieldContainerWSS').forEach(function (e) {
                 e.style.display = 'block';
             });
