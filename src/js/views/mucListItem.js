@@ -3,11 +3,11 @@
 
 var _ = require('underscore');
 var HumanView = require('human-view');
-var templates = require('../templates');
 
+var mucListItem = require('../../jade/templates/includes/mucListItem.jade');
 
 module.exports = HumanView.extend({
-    template: templates.includes.mucListItem,
+    template: mucListItem,
     classBindings: {
         activeContact: '',
         hasUnread: '',

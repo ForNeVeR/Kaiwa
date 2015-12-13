@@ -3,11 +3,11 @@
 
 var _ = require('underscore');
 var HumanView = require('human-view');
-var templates = require('../templates');
 
+var contactListItem = require('../../jade/templates/includes/contactListItem.jade');
 
 module.exports = HumanView.extend({
-    template: templates.includes.contactListItem,
+    template: contactListItem,
     classBindings: {
         show: '',
         subscription: '',

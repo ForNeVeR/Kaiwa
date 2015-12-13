@@ -3,8 +3,8 @@
 
 var _ = require('underscore');
 var HumanView = require('human-view');
-var templates = require('../templates');
 
+var contactRequest = require('../../jade/templates/includes/contactRequest.jade');
 
 module.exports = HumanView.extend({
     template: templates.includes.contactRequest,

@@ -24,7 +24,6 @@ gulp.task('compile', ['resources', 'client', 'config', 'manifest']);
 gulp.task('watch', function () {
     watch([
         './src/**',
-        '!./src/js/templates.js',
         './dev_config.json'
     ], batch(function (events, done) {
         console.log('==> Recompiling Kaiwa');
