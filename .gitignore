@@ -3,7 +3,6 @@
 /build/
 /src/js/templates.js
 /public/
-/typings/
 /dev_config.json
 
 *.log

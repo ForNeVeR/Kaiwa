@@ -6,7 +6,6 @@
     "crypto": "crypto-browserify"
   },
   "scripts": {
-    "install": "tsd install",
     "compile": "gulp compile",
     "start": "node ./src/server.js",
     "devel-nix": "gulp watch & node ./src/server.js",
@@ -80,7 +79,6 @@
     "merge-stream": "^1.0.0",
     "mkdirp": "^0.5.1",
     "ts-loader": "^0.7.2",
-    "tsd": "^0.6.5",
     "typescript": "^1.7.3",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
