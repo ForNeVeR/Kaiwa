@@ -235,9 +235,9 @@ module.exports = BasePage.extend({
         var length = splited.length-1;
         var lastWord = splited.pop();
         if (('@' + nickName).indexOf(lastWord) > -1)
-            splited[length] = nickName + ', ';
+            splited[length] = '@' + nickName + ' ';
         else
-            splited.push(nickName + ', ');
+            splited.push('@' + nickName + ' ');
         this.$chatInput.val(splited.join(' '));
         this.$autoComplete.hide();
         this.$chatInput.focus();

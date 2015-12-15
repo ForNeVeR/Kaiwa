@@ -7,40 +7,10 @@ module.exports = BaseCollection.extend({
     type: 'resources',
     model: Resource,
     comparator: function (res1, res2) {
-        if (res1.priority > res2.priority) {
-            return -1;
-        }
-        if (res1.priority < res2.priority) {
-            return 1;
-        }
-        if (res1.show === res2.show) {
-            if (!!res1.idleSince && !!res2.idleSince) {
-                return 0;
-            }
-            if (res1.idleSince && !!res2.idleSince) {
-                return 1;
-            }
-            return -1;
-
-        }
-
-        var ranking = {
-            xa: 0,
-            away: 1,
-            '': 2,
-            chat: 3,
-            dnd: 3
-        };
-        var r1 = ranking[res1.show];
-        var r2 = ranking[res2.show];
-
-        if (r1 === r2) {
-            return 0;
-        }
-        if (r1 > r2) {
-            return -1;
-        }
-        return 1;
+        var name1 = res1.mucDisplayName.toLowerCase(),
+            name2 = res2.mucDisplayName.toLowerCase();
+        return (name1 > name2) ? 1 : 
+            (name1 < name2) ? -1 : 0;
     },
     search : function (letters, removeMe, addAll) {
         if(letters == "" && !removeMe) return this;
