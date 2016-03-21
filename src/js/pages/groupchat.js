@@ -4,17 +4,20 @@
 var _ = require('underscore');
 var StanzaIo = require('stanza.io');
 var StayDown = require('staydown');
+
 var BasePage = require('./base');
-var templates = require('../templates');
 var MUCRosterItem = require('../views/mucRosterItem');
-var Message = require('../views/mucMessage');
 var MessageModel = require('../models/message');
 var embedIt = require('../helpers/embedIt');
 var htmlify = require('../helpers/htmlify');
+
+var groupchat = require('../../jade/templates/pages/groupchat.jade');
+var dayDivider = require('../../jade/templates/includes/dayDivider.jade');
+
 var tempSubject = '';
 
 module.exports = BasePage.extend({
-    template: templates.pages.groupchat,
+    template: groupchat,
     initialize: function (spec) {
         this.editMode = false;
 
@@ -360,7 +363,7 @@ module.exports = BasePage.extend({
             }
 
             if (messageDay !== this.lastDate) {
-                var dayDivider = $(templates.includes.dayDivider({day_name: messageDay}));
+                var dayDivider = $(dayDivider({day_name: messageDay}));
                 this.staydown.append(dayDivider[0]);
                 this.lastDate = messageDay;
             }
@@ -385,7 +388,7 @@ module.exports = BasePage.extend({
             var firstEl = this.$messageList.find('li').first();
 
             if (messageDay !== this.firstDate) {
-                var dayDivider = $(templates.includes.dayDivider({day_name: messageDay}));
+                var dayDivider = $(dayDivider({day_name: messageDay}));
                 firstEl.before(dayDivider[0]);
                 var firstEl = this.$messageList.find('li').first();
                 this.firstDate = messageDay;

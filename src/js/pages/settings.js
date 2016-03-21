@@ -2,10 +2,11 @@
 "use strict";
 
 var BasePage = require('./base');
-var templates = require('../templates');
+
+var settings = require('../../jade/templates/pages/settings.jade');
 
 module.exports = BasePage.extend({
-    template: templates.pages.settings,
+    template: settings,
     classBindings: {
         shouldAskForAlertsPermission: '.enableAlerts',
         soundEnabledClass: '.soundNotifs'

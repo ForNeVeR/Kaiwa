@@ -1,7 +1,6 @@
 /node_modules/
 
 /build/
-/src/js/templates.js
 /public/
 /dev_config.json
 

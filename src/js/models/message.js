@@ -4,8 +4,12 @@
 var _ = require('underscore');
 var uuid = require('node-uuid');
 var HumanModel = require('human-model');
-var templates = require('../templates');
+
 var htmlify = require('../helpers/htmlify');
+
+var mucBareMessage = require('../../jade/templates/includes/mucBareMessage.jade');
+var mucWrappedMessage = require('../../jade/templates/includes/mucWrappedMessage.jade');
+var wrappedMessage = require('../../jade/templates/includes/wrappedMessage.jade');
 
 var ID_CACHE = {};
 
@@ -133,9 +137,9 @@ var Message = module.exports = HumanModel.define({
             cache: false,
             fn: function () {
                 if (this.type === 'groupchat') {
-                    return templates.includes.mucWrappedMessage({message: this, messageDate: Date.create(this.timestamp), firstEl: true});
+                    return mucWrappedMessage({message: this, messageDate: Date.create(this.timestamp), firstEl: true});
                 } else {
-                    return templates.includes.wrappedMessage({message: this, messageDate: Date.create(this.timestamp), firstEl: true});
+                    return wrappedMessage({message: this, messageDate: Date.create(this.timestamp), firstEl: true});
                 }
             }
         },
@@ -215,9 +219,9 @@ var Message = module.exports = HumanModel.define({
     },
     bareMessageTemplate: function (firstEl) {
         if (this.type === 'groupchat') {
-            return templates.includes.mucBareMessage({message: this, messageDate: Date.create(this.timestamp), firstEl: firstEl});
+            return mucBareMessage({message: this, messageDate: Date.create(this.timestamp), firstEl: firstEl});
         } else {
-            return templates.includes.bareMessage({message: this, messageDate: Date.create(this.timestamp), firstEl: firstEl});
+            return bareMessage({message: this, messageDate: Date.create(this.timestamp), firstEl: firstEl});
         }
     },
     save: function () {

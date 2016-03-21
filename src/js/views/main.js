@@ -3,16 +3,17 @@
 
 var HumanView = require('human-view');
 var StanzaIo = require('stanza.io');
-var templates = require('../templates');
+
 var ContactListItem = require('../views/contactListItem');
 var MUCListItem = require('../views/mucListItem');
 var CallView = require('../views/call');
-
 var ContactRequestItem = require('../views/contactRequest');
 
+var head = require('../../jade/templates/head.jade');
+var body = require('../../jade/templates/body.jade');
 
 module.exports = HumanView.extend({
-    template: templates.body,
+    template: body,
     initialize: function () {
         this.listenTo(app.state, 'change:title', this.handleTitle);
         app.desktop.updateBadge('');
@@ -39,7 +40,7 @@ module.exports = HumanView.extend({
         currentPageIsSettings: '.settings'
     },
     render: function () {
-        $('head').append(templates.head());
+        $('head').append(head());
         $('body').removeClass('aux');
         this.renderAndBind();
         this.renderCollection(me.contacts, ContactListItem, this.$('#roster nav'));

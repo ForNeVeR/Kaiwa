@@ -3,11 +3,11 @@
 
 var _ = require('underscore');
 var HumanView = require('human-view');
-var templates = require('../templates');
 
+var mucRosterItem = require('../../jade/templates/includes/mucRosterItem.jade');
 
 module.exports = HumanView.extend({
-    template: templates.includes.mucRosterItem,
+    template: mucRosterItem,
     events: {
         'click': 'handleClick'
     },

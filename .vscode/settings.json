@@ -6,15 +6,13 @@
 		"**/node_modules": true,
 		"/public": true,
 		"/build": true,
-		"/typings": true,
-		"/src/js/templates.js": true
+		"/typings": true
 	},
 	"search.exclude": {
 		"**/node_modules": true,
 		"**/bower_components": true,
 		"/public": true,
 		"/build": true,
-		"/typings": true,
-		"/src/js/templates.js": true
+		"/typings": true
 	}
 }

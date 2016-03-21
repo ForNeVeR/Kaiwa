@@ -3,11 +3,11 @@
 
 var _ = require('underscore');
 var HumanView = require('human-view');
-var templates = require('../templates');
 
+var call = require('../../jade/templates/includes/call.jade');
 
 module.exports = HumanView.extend({
-    template: templates.includes.call,
+    template: call,
     classBindings: {
         state: ''
     },
