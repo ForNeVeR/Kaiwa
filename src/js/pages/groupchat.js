@@ -296,7 +296,6 @@ module.exports = BasePage.extend({
                 type: 'groupchat',
                 body: val,
                 chatState: 'active',
-                oobURIs: links
             };
             if (this.editMode) {
                 message.replace = this.model.lastSentMessage.mid || this.model.lastSentMessage.cid;

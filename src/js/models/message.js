@@ -162,29 +162,18 @@ var Message = module.exports = HumanModel.define({
             }
         },
         urls: {
-            deps: ['body', 'oobURIs'],
+            deps: ['body'],
             fn: function () {
                 var self = this;
                 var result = [];
                 var urls = htmlify.collectLinks(this.body);
-                var oobURIs = _.pluck(this.oobURIs || [], 'url');
-                var uniqueURIs = _.unique(result.concat(urls).concat(oobURIs));
 
-                _.each(uniqueURIs, function (url) {
-                    var oidx = oobURIs.indexOf(url);
-                    if (oidx >= 0) {
-                        result.push({
-                            href: url,
-                            desc: self.oobURIs[oidx].desc,
-                            source: 'oob'
-                        });
-                    } else {
-                        result.push({
-                            href: url,
-                            desc: url,
-                            source: 'body'
-                        });
-                    }
+                _.each(urls, function (url) {
+                    result.push({
+                        href: url,
+                        desc: url,
+                        source: 'body'
+                    });
                 });
 
                 return result;

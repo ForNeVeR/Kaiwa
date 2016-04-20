@@ -191,7 +191,6 @@ module.exports = BasePage.extend({
                 type: 'chat',
                 body: val,
                 requestReceipt: true,
-                oobURIs: links
             };
             if (this.model.supportsChatStates) {
                 message.chatState = 'active';
