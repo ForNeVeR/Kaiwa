@@ -2,6 +2,7 @@ interface Window {
     SERVER_CONFIG: {
         name: string;
         domain: string;
+        port: number;
         wss: string;
         sasl: string;
         securePasswordStorage: boolean;
