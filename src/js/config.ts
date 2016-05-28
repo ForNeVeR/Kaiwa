@@ -1,6 +1,8 @@
 interface Window {
     SERVER_CONFIG: {
+        isDev: boolean;
         name: string;
+        baseUrl: string;
         domain: string;
         port: number;
         wss: string;
