@@ -1,5 +1,20 @@
-import { Component } from 'react'
+import { Component } from 'react';
 
-export class App extends Component<{}, {}> {
+const StanzaIO = require('stanza.io');
+
+export class App extends Component<{}, any> {
+
+    constructor () {
+        super();
+
+        console.log("Init App");
+
+        this.state.session = JSON.parse(localStorage.getItem("session"));
+
+    }
+
+    render () {
+        return null;
+    }
 
 }
