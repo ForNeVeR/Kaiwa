@@ -1,7 +1,7 @@
 var fs = require('fs');
 var express = require('express');
 
-var config = JSON.parse(fs.readFileSync('./config.json'));
+var config = require('../config.js').SERVER_CONFIG;
 
 var app = express();
 var serveStatic = require('serve-static');
