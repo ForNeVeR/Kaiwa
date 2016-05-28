@@ -1,6 +1,7 @@
 window.SERVER_CONFIG = {
     "name": "Kaiwa",
     "domain": "example.com",
+    "port": 8000,
     "wss": "wss://example.com:5281/xmpp-websocket/",
     "sasl": "scram-sha-1",
     "securePasswordStorage": true,
