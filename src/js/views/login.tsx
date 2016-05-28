@@ -28,36 +28,40 @@ class Field extends Component<{
                              autoFocus={props.autoFocus} />;
         const components = isCheckBox ?[ input, label ] : [ label, input ];
 
-        return <div className={className} title={props.title}>
-            {components}
-        </div>;
+        return (
+            <div className={className} title={props.title}>
+                {components}
+            </div>
+        );
     }
 }
 
 export class Login extends Component<{}, {}> {
     render() {
         const showWssSelector = !window.SERVER_CONFIG.wss;
-        return <section className="loginbox content box">
-            <div className="head">
-                <h2>Log in</h2>
-            </div>
-            <div className="content">
-                <form id="login-form">
-                    <Field id="jid" label="Username" placeholder="you" tabIndex={1} autoFocus={true} />
-                    <Field id="password"
-                           type="password"
-                           label="Password"
-                           placeholder="••••••••"
-                           tabIndex={2} />
-                    {showWssSelector
-                        ? <Field id="connURL" label="WebSocket or BOSH URL" placeholder="wss://aweso.me:5281/xmpp-websocket" tabIndex={3} />
-                        : null}
-                    <Field id="public-computer" label="Public computer" type="checkbox" tabIndex={4} title="Do not remember password" />
+        return (
+            <section className="loginbox content box">
+                <div className="head">
+                    <h2>Log in</h2>
+                </div>
+                <div className="content">
+                    <form id="login-form">
+                        <Field id="jid" label="Username" placeholder="you" tabIndex={1} autoFocus={true} />
+                        <Field id="password"
+                               type="password"
+                               label="Password"
+                               placeholder="••••••••"
+                               tabIndex={2} />
+                        {showWssSelector
+                            ? <Field id="connURL" label="WebSocket or BOSH URL" placeholder="wss://aweso.me:5281/xmpp-websocket" tabIndex={3} />
+                            : null}
+                        <Field id="public-computer" label="Public computer" type="checkbox" tabIndex={4} title="Do not remember password" />
 
-                    <button type="submit" tabIndex={5} className="primary">Go!</button>
-                </form>
-            </div>
-        </section>
+                        <button type="submit" tabIndex={5} className="primary">Go!</button>
+                    </form>
+                </div>
+            </section>
+        );
     }
 }
 
