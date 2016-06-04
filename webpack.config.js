@@ -79,7 +79,7 @@ module.exports = {
             },
             {
                 test: /\.styl$/,
-                loader: 'file?name=css/[hash].css!stylus'
+                loader: 'file?name=/css/[hash].css!stylus'
             },
             {
                 test: /\.ts(x?)$/,
