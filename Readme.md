@@ -62,22 +62,30 @@ that they're 9 hours away where it's 4am and they're not likely to respond.
 First of all, clone the repository, install the dependencies and configure the
 application:
 
-    $ git clone https://github.com/ForNeVeR/kaiwa.git
-    $ cd kaiwa
-    $ npm install
-    $ cp config.example.json config.json # and edit the file
+```console
+$ git clone https://github.com/ForNeVeR/kaiwa.git
+$ cd kaiwa
+$ npm install
+$ cp config.example.json config.json # and edit the file
+```
 
 After that compile the application:
 
-    $ npm run webpack # or `npm run deploy` if you want optimized version
+```console
+$ npm run webpack # or `npm run deploy` if you want optimized version
+```
 
 And start the server:
 
-    $ npm start
+```console
+$ npm start
+```
 
 For the development purposes you may use
 
-    $ npm run devel
+```console
+$ npm run devel
+```
 
 It will continously monitor the `src` directory for changes and recompile
 application on any change.
