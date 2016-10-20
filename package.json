@@ -84,7 +84,7 @@
     "stylus": "^0.54.5",
     "stylus-loader": "^2.1.1",
     "tape": "^4.6.0",
-    "ts-loader": "^0.9.0",
+    "ts-loader": "^0.9.5",
     "tslint": "^3.13.0",
     "typescript": "^2.0.3",
     "webpack": "^1.13.1",
