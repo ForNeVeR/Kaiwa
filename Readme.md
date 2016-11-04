@@ -59,7 +59,7 @@ that they're 9 hours away where it's 4am and they're not likely to respond.
 
 ## Prerequisites to build
 
-You'll need [Node.js][node-js] 0.10+ and [npm][] 3+.
+You'll need [Node.js][node-js] 0.12+ and [npm][] 3+.
 
 Please note that Node.js distributions older than 6 uses older versions of npm
 by default; you may update your npm by running the following from your terminal:

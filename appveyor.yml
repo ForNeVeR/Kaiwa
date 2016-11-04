@@ -2,11 +2,9 @@ version: 1.1.0.{build}
 
 environment:
     matrix:
-        - nodejsVersion: "6.7"
-        - nodejsVersion: "4.6"
-        - nodejsVersion: "0.12"
-        - nodejsVersion: "0.11"
-        - nodejsVersion: "0.10"
+        - nodejsVersion: '6.7'
+        - nodejsVersion: '4.6'
+        - nodejsVersion: '0.12'
 
 install:
     - ps: Install-Product node $env:nodejsVersion
