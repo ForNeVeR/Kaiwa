@@ -86,7 +86,7 @@
     "tape": "^4.6.0",
     "ts-loader": "^0.9.5",
     "tslint": "^3.13.0",
-    "typescript": "^2.0.3",
+    "typescript": "^2.0.7",
     "webpack": "^1.13.1",
     "webpack-fail-plugin": "^1.0.5"
   }
