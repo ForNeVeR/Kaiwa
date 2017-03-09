@@ -30,12 +30,12 @@ module.exports = function (jid, id, type, source, cb) {
                         return cb(fallback(jid));
                     }
 
-		            if (!resp.vCardTemp.photo) return cb(fallback(jid));
+                    if (!resp.vCardTemp.photo) return cb(fallback(jid));
 
                     type = resp.vCardTemp.photo.type || type;
 
-                    var data = resp.vCardTemp.photo.data;
-                    var uri = 'data:' + type + ';base64,' + data;
+                    var data = resp.vCardTemp.photo.data,
+                        uri = 'data:' + type + ';base64,' + data;
 
                     avatar = {
                         id: id,
@@ -52,8 +52,8 @@ module.exports = function (jid, id, type, source, cb) {
                         return; 
                     }
 
-                    var data = resp.pubsub.retrieve.item.avatarData;
-                    var uri = 'data:' + type + ';base64,' + data;
+                    var data = resp.pubsub.retrieve.item.avatarData,
+                        uri = 'data:' + type + ';base64,' + data;
 
                     avatar = {
                         id: id,

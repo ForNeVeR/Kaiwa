@@ -9,14 +9,20 @@ module.exports = function ($html, cb) {
         maxWidth: 500,
         maxHeight: 350,
         afterEmbed: function(container, oembedData) {
-            this.parent().parent().parent().show();
+            this.parent()
+                .parent()
+                .parent()
+                .show();
         },
         onProviderNotFound: function() {
-            var link = $($html).find("a.source");
-            var resourceURL = link.attr("href");
+            var link = $($html).find("a.source"),
+                resourceURL = link.attr("href");
             if (resourceURL.match(/\.(jpg|png|gif)\b/)) {
-                link.parent().append("<div class='oembedall-container'><a href='" + resourceURL + "' target='_blank'><img src='" + resourceURL + "' / style='max-width:500px; max-height:350px; width: auto; height: auto;'></a></div>");
-                this.parent().parent().show();
+                link.parent()
+                    .append("<div class='oembedall-container'><a href='" + resourceURL + "' target='_blank'><img src='" + resourceURL + "' / style='max-width:500px; max-height:350px; width: auto; height: auto;'></a></div>");
+                this.parent()
+                    .parent()
+                    .show();
             }
         }
     });

@@ -1,60 +1,65 @@
 /*global me, app, client*/
 "use strict";
 
-var _ = require('underscore');
-var async = require('async');
-var crypto = require('crypto');
-var bows = require('bows');
-var uuid = require('node-uuid');
-var HumanModel = require('human-model');
-var Contact = require('../models/contact');
-var Resource = require('../models/resource');
-var Message = require('../models/message');
-var Call = require('../models/call');
-var StanzaIo = require('stanza.io');
+var _ = require('underscore'),
+    async = require('async'),
+    crypto = require('crypto'),
+    bows = require('bows'),
+    uuid = require('node-uuid'),
+    HumanModel = require('human-model'),
+    Contact = require('../models/contact'),
+    Resource = require('../models/resource'),
+    Message = require('../models/message'),
+    Call = require('../models/call'),
+    StanzaIo = require('stanza.io'),
 
-var log = bows('Otalk');
-var ioLogIn = bows('<< in');
-var ioLogOut = bows('>> out');
+    log = bows('Otalk'),
+    ioLogIn = bows('<< in'),
+    ioLogOut = bows('>> out'),
 
-var discoCapsQueue = async.queue(function (pres, cb) {
-    var jid = pres.from;
-    var caps = pres.caps;
+    discoCapsQueue = async.queue(function (pres, cb) {
+        var jid = pres.from,
+            caps = pres.caps;
 
-    log.info('Checking storage for ' + caps.ver);
+        log.info('Checking storage for ' + caps.ver);
 
-    var contact = me.getContact(jid);
-    var resource = null;
-    if (contact) {
-        resource = contact.resources.get(jid);
-    }
+        var contact = me.getContact(jid),
+            resource = contact ? contact.resources.get(jid) : false;
 
-    app.storage.disco.get(caps.ver, function (err, existing) {
-        if (existing) {
-            log.info('Already found info for ' + caps.ver);
-            if (resource) resource.discoInfo = existing;
-            return cb();
-        }
-        log.info('getting info for ' + caps.ver + ' from ' + jid);
-        client.getDiscoInfo(jid, caps.node + '#' + caps.ver, function (err, result) {
-            if (err || !result.discoInfo.features) {
-                log.info('Couldnt get info for ' + caps.ver);
+        app.storage.disco.get(caps.ver, function (err, existing) {
+            if (existing) {
+                log.info('Already found info for ' + caps.ver);
+                if (resource) resource.discoInfo = existing;
                 return cb();
             }
-            if (client.verifyVerString(result.discoInfo, caps.hash, caps.ver)) {
-                log.info('Saving info for ' + caps.ver);
-                var data = result.discoInfo;
-                app.storage.disco.add(caps.ver, data, function () {
-                    if (resource) resource.discoInfo = data;
-                    cb();
-                });
-            } else {
-                log.info('Couldnt verify info for ' + caps.ver + ' from ' + jid);
-                cb();
-            }
+
+            log.info('getting info for ' + caps.ver + ' from ' + jid);
+
+            client.getDiscoInfo(
+                jid,
+                caps.node + '#' + caps.ver,
+                function (err, result) {
+                    if (err || !result.discoInfo.features) {
+                        log.info('Couldnt get info for ' + caps.ver);
+                        return cb();
+                    }
+                    if (client.verifyVerString(result.discoInfo, caps.hash,
+                            caps.ver)) {
+                        log.info('Saving info for ' + caps.ver);
+                        var data = result.discoInfo;
+                        app.storage.disco.add(caps.ver, data, function () {
+                            if (resource) resource.discoInfo = data;
+                            cb();
+                        });
+                    } else {
+                        log.info('Couldnt verify info for ' + caps.ver
+                                + ' from ' + jid);
+                        cb();
+                    }
+                }
+            );
         });
     });
-});
 
 
 module.exports = function (client, app) {
@@ -154,12 +159,14 @@ module.exports = function (client, app) {
     });
 
     client.on('roster:update', function (iq) {
-        var items = iq.roster.items;
+        var items = iq.roster.items,
+            contact;
 
         me.rosterVer = iq.roster.ver;
 
+        
         _.each(items, function (item) {
-            var contact = me.getContact(item.jid);
+            contact = me.getContact(item.jid);
 
             if (item.subscription === 'remove') {
                 if (contact) {
@@ -237,20 +244,17 @@ module.exports = function (client, app) {
     });
 
     client.on('avatar', function (info) {
-        var contact = me.getContact(info.jid);
+        var contact = me.getContact(info.jid) || me.isMe(info.jid);
         if (!contact) {
-            if (me.isMe(info.jid)) {
-                contact = me;
-            } else {
-                return;
-            }
+            return;
         }
 
-        var id = '';
-        var type = 'image/png';
+        var id = '',
+            type = 'image/png';
+        // kaiwa_avatars.png
         if (info.avatars.length > 0) {
             id = info.avatars[0].id;
-            type = info.avatars[0].type || 'image/png';
+            type = info.avatars[0].type || type;
         }
 
         if (contact.type === 'muc') {
@@ -271,11 +275,8 @@ module.exports = function (client, app) {
             var resource = contact.resources.get(info.from.full);
             if (resource) {
                 resource.chatState = info.chatState;
-                if (info.chatState === 'gone') {
-                    contact.lockedResource = undefined;
-                } else {
-                    contact.lockedResource = info.from.full;
-                }
+                contact.lockedResource = (info.chatState === 'gone') ?
+                    undefined : info.from.full;
             }
         } else if (me.isMe(info.from)) {
             if (info.chatState === 'active' || info.chatState === 'composing') {
@@ -307,8 +308,8 @@ module.exports = function (client, app) {
                 msg.delay.stamp = new Date(Date.now() + app.timeInterval);
 
             message.acked = true;
-            var localTime = new Date(Date.now() + app.timeInterval);
-            var notify = Math.round((localTime - message.created) / 1000) < 5;
+            var localTime = new Date(Date.now() + app.timeInterval),
+                notify = Math.round((localTime - message.created) / 1000) < 5;
             contact.addMessage(message, notify);
             if (msg.from.bare == contact.jid.bare) {
                 contact.lockedResource = msg.from.full;
@@ -324,8 +325,8 @@ module.exports = function (client, app) {
         if (contact && !msg.replace) {
             var message = new Message(msg);
             message.acked = true;
-            var localTime = new Date(Date.now() + app.timeInterval);
-            var notify = Math.round((localTime - message.created) / 1000) < 5;
+            var localTime = new Date(Date.now() + app.timeInterval),
+                notify = Math.round((localTime - message.created) / 1000) < 5;
             contact.addMessage(message, notify);
         }
     });
@@ -344,7 +345,10 @@ module.exports = function (client, app) {
         var contact = me.getContact(msg.from, msg.to);
         if (!contact) return;
 
-        var original = Message.idLookup(msg.from[msg.type === 'groupchat' ? 'full' : 'bare'], msg.replace);
+        var original = Message.idLookup(
+            msg.from[msg.type === 'groupchat' ? 'full' : 'bare'],
+            msg.replace
+        );
 
         if (!original) return;
 
@@ -355,7 +359,10 @@ module.exports = function (client, app) {
         var contact = me.getContact(msg.from, msg.to);
         if (!contact) return;
 
-        var original = Message.idLookup(msg.to[msg.type === 'groupchat' ? 'full' : 'bare'], msg.receipt);
+        var original = Message.idLookup(
+            msg.to[msg.type === 'groupchat' ? 'full' : 'bare'],
+            msg.receipt
+        );
 
         if (!original) return;
 
@@ -409,12 +416,12 @@ module.exports = function (client, app) {
     });
 
     client.on('jingle:outgoing', function (session) {
-        var contact = me.getContact(session.peer);
-        var call = new Call({
-            contact: contact,
-            state: 'outgoing',
-            jingleSession: session
-        });
+        var contact = me.getContact(session.peer),
+            call = new Call({
+                contact: contact,
+                state: 'outgoing',
+                jingleSession: session
+            });
         contact.jingleCall = call;
         me.calls.add(call);
     });
