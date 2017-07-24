@@ -5,6 +5,6 @@ function version_lt() {
 }
 
 NPM_VERSION=$(npm --version)
-if version_lt $NPM_VERSION 3 ; then
-    npm install -g npm@^3
+if version_lt $NPM_VERSION 5 ; then
+    npm install -g npm@^5
 fi
