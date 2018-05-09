@@ -11,6 +11,7 @@ var MessageModel = require('../models/message');
 var embedIt = require('../helpers/embedIt');
 var htmlify = require('../helpers/htmlify');
 var attachMediaStream = require('attachmediastream');
+var shareMedia = require('../helpers/shareMedia');
 
 module.exports = BasePage.extend({
     template: templates.pages.chat,
@@ -35,7 +36,8 @@ module.exports = BasePage.extend({
         'click .call': 'handleCallClick',
         'click .accept': 'handleAcceptClick',
         'click .end': 'handleEndClick',
-        'click .mute': 'handleMuteClick'
+        'click .mute': 'handleMuteClick',
+        'change #files': 'handleMediaClick',
     },
     srcBindings: {
         streamUrl: 'video.remote'
@@ -325,6 +327,85 @@ module.exports = BasePage.extend({
         }
         return false;
     },
+    handleMediaClick: function(e){
+        e.preventDefault();
+        var self = this;
+        console.log(this.model.topResource);
+        var file;
+        if (e.dataTransfer) {
+            file = e.dataTransfer.files[0];
+        } else if (e.target.files) {
+            file = e.target.files[0];
+        } else {
+            return;
+        }
+
+        if (file.type.match('image.*')) {
+            var downloadURL = URL.createObjectURL(file);
+            console.log('Offering:', file.name, file.size, file.type, file.lastModifiedDate,  downloadURL);
+            
+            var fileTracker = new FileReader();
+          
+            fileTracker.onload = function () {
+            console.log('file', file.name, file.size, file.type, file.lastModifiedDate);
+            var data =  this.result; 
+       /*     var resampler = new Resample(data, 80, 80, function (data) {*/
+            var b64Data = data.split(',')[1];
+            var id = crypto.createHash('sha1').update(atob(b64Data)).digest('hex');   
+            client.use(shareMedia);
+            var buf = Buffer.from(b64Data,'base64');
+                   
+            var message = {
+                    from:me.jid,
+                    id:client.nextId(),
+                    to: 'upload.hostname',  // replace hostname with your ejabberd host name         
+                    type: 'get',
+                    request: {
+                        filename: file.name,
+                        size: buf.length,
+                        'content-type':'image/png'                                                                                                                                   
+                    }
+                };
+            client.mediaPushService(message , function (err,result) {  
+                var imageURl = result.uploadSlot.put;              
+                console.log('put url:' + result.uploadSlot.put);
+
+                let header = new Headers({
+                    'Access-Control-Expose-Headers' : 'Access-Control-*',
+                    'Access-Control-Allow-Headers': 'Content-Type, Origin, X-Requested-With',
+                    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS, HEAD',
+                    'Access-Control-Allow-Origin': '*',                    
+                    'Content-Type': 'text/plain'
+                });
+               /* var b = new Buffer(b64Data, 'base64')
+                var s = b.toString();*/
+                
+
+                fetch(imageURl, {
+                  method: 'PUT',
+                   mode: 'cors',
+                   header : header,
+                   body:  buf
+                });
+                if(err)console.error(err); 
+                
+                client.sendMessage({
+                  id: client.nextId(), 
+                  type:'chat',
+                  to: self.model.topResource,
+                  body:imageURl
+                });
+                console.log('file uploaded');
+                $("#files").val('');
+            }).catch(function (err) {
+                console.log('file not uploaded');
+            });
+
+            /*});*/
+        }
+         fileTracker.readAsDataURL(file);
+        }        
+    },  
     handleEndClick: function (e) {
         e.preventDefault();
         var condition = 'success';
