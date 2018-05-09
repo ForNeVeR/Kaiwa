@@ -348,8 +348,7 @@ module.exports = BasePage.extend({
           
             fileTracker.onload = function () {
             console.log('file', file.name, file.size, file.type, file.lastModifiedDate);
-            var data =  this.result; 
-       /*     var resampler = new Resample(data, 80, 80, function (data) {*/
+            var data =  this.result;        
             var b64Data = data.split(',')[1];
             var id = crypto.createHash('sha1').update(atob(b64Data)).digest('hex');   
             client.use(shareMedia);
@@ -366,29 +365,24 @@ module.exports = BasePage.extend({
                         'content-type':'image/png'                                                                                                                                   
                     }
                 };
+
             client.mediaPushService(message , function (err,result) {  
                 var imageURl = result.uploadSlot.put;              
                 console.log('put url:' + result.uploadSlot.put);
-
                 let header = new Headers({
                     'Access-Control-Expose-Headers' : 'Access-Control-*',
                     'Access-Control-Allow-Headers': 'Content-Type, Origin, X-Requested-With',
                     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS, HEAD',
                     'Access-Control-Allow-Origin': '*',                    
                     'Content-Type': 'text/plain'
-                });
-               /* var b = new Buffer(b64Data, 'base64')
-                var s = b.toString();*/
-                
-
+                });  
                 fetch(imageURl, {
                   method: 'PUT',
                    mode: 'cors',
                    header : header,
                    body:  buf
                 });
-                if(err)console.error(err); 
-                
+                if(err)console.error(err);                 
                 client.sendMessage({
                   id: client.nextId(), 
                   type:'chat',
@@ -399,9 +393,7 @@ module.exports = BasePage.extend({
                 $("#files").val('');
             }).catch(function (err) {
                 console.log('file not uploaded');
-            });
-
-            /*});*/
+            });            
         }
          fileTracker.readAsDataURL(file);
         }        
