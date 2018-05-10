@@ -2,11 +2,6 @@
 
 module.exports = function (client, stanzas) {
     var types = stanzas.utils;
-    let jxt = require('jxt').createRegistry();
-    jxt.use(require('jxt-xmpp-types'));
-    jxt.use(require('jxt-xmpp'));
-    let helpers = jxt.utils;
-
     let UPLOAD_NS = 'urn:xmpp:http:upload:0';   
 
     var shareMedia = stanzas.define({
@@ -41,17 +36,17 @@ module.exports = function (client, stanzas) {
         return client.sendIq(message);
     };
 
-    let UploadSlot = jxt.define({
+    let UploadSlot = stanzas.define({
         name: 'uploadSlot',
         namespace: UPLOAD_NS,
         element: 'slot',
         fields: {
-            get: helpers.subAttribute(UPLOAD_NS, 'get', 'url'),
-            put: helpers.subAttribute(UPLOAD_NS, 'put', 'url')
+            get: types.subAttribute(UPLOAD_NS, 'get', 'url'),
+            put: types.subAttribute(UPLOAD_NS, 'put', 'url')
         }
     });
 
-    jxt.extendIQ(UploadSlot);
+    stanzas.extendIQ(UploadSlot);
 
     client.mediaPushService = function (message, cb) {
         return client.sendIq( message, cb );
