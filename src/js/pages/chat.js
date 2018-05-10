@@ -357,7 +357,7 @@ module.exports = BasePage.extend({
             var message = {
                     from:me.jid,
                     id:client.nextId(),
-                    to: 'upload.hostname',  // replace hostname with your ejabberd host name         
+                    to: SERVER_CONFIG.uploadDirectory,       
                     type: 'get',
                     request: {
                         filename: file.name,
