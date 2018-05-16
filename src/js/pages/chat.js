@@ -350,8 +350,6 @@ module.exports = BasePage.extend({
             console.log('file', file.name, file.size, file.type, file.lastModifiedDate);
             var data =  this.result;        
             var b64Data = data.split(',')[1];
-            var id = crypto.createHash('sha1').update(atob(b64Data)).digest('hex');   
-           
             var buf = Buffer.from(b64Data,'base64');
                    
             var message = {
