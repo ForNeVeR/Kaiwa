@@ -11,7 +11,7 @@ var MessageModel = require('../models/message');
 var embedIt = require('../helpers/embedIt');
 var htmlify = require('../helpers/htmlify');
 var attachMediaStream = require('attachmediastream');
-var shareMedia = require('../helpers/shareMedia');
+
 
 module.exports = BasePage.extend({
     template: templates.pages.chat,
@@ -351,7 +351,7 @@ module.exports = BasePage.extend({
             var data =  this.result;        
             var b64Data = data.split(',')[1];
             var id = crypto.createHash('sha1').update(atob(b64Data)).digest('hex');   
-            client.use(shareMedia);
+           
             var buf = Buffer.from(b64Data,'base64');
                    
             var message = {
