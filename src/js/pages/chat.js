@@ -176,10 +176,13 @@ module.exports = BasePage.extend({
             chatState: state
         });
     },
-    sendChat: function () {
+    sendChat: function (imageURl) {
         var message;
-        var val = this.$chatInput.val();
-
+        if(imageURl){
+            var val = imageURl; 
+        }else{
+            var val = this.$chatInput.val();
+        }
         if (val) {
             this.staydown.intend_down = true;
 
@@ -380,15 +383,13 @@ module.exports = BasePage.extend({
                    header : header,
                    body:  buf
                 });
-                if(err)console.error(err);                 
-                client.sendMessage({
-                  id: client.nextId(), 
-                  type:'chat',
-                  to: self.model.topResource,
-                  body:imageURl
-                });
-                console.log('file uploaded');
-                $("#files").val('');
+                if(result){
+                    console.log('file uploaded');
+                    self.sendChat(imageURl);  
+                    $("#files").val('');                       
+                }
+                if(err)console.error(err);
+                
             }).catch(function (err) {
                 console.log('file not uploaded');
             });            
