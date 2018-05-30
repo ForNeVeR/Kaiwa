@@ -28,6 +28,7 @@ var Router = require('./router')
 var Storage: StorageConstructor = require('./storage')
 var xmppEventHandlers = require('./helpers/xmppEventHandlers')
 var pushNotifications = require('./helpers/pushNotifications')
+var shareMedia = require('./helpers/shareMedia')
 const Notify = require('notify.js')
 var Desktop = require('./helpers/desktop')
 var AppCache = require('./helpers/cache')
@@ -108,6 +109,7 @@ class App {
 
                 self.api = window['client'] = StanzaIO.createClient(app.config)
                 client.use(pushNotifications)
+                client.use(shareMedia)
                 xmppEventHandlers(self.api, self)
 
                 self.api.once('session:started', function () {

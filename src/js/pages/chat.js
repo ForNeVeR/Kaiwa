@@ -12,6 +12,7 @@ var embedIt = require('../helpers/embedIt');
 var htmlify = require('../helpers/htmlify');
 var attachMediaStream = require('attachmediastream');
 
+
 module.exports = BasePage.extend({
     template: templates.pages.chat,
     initialize: function (spec) {
@@ -35,7 +36,8 @@ module.exports = BasePage.extend({
         'click .call': 'handleCallClick',
         'click .accept': 'handleAcceptClick',
         'click .end': 'handleEndClick',
-        'click .mute': 'handleMuteClick'
+        'click .mute': 'handleMuteClick',
+        'change #files': 'handleMediaClick',
     },
     srcBindings: {
         streamUrl: 'video.remote'
@@ -174,10 +176,13 @@ module.exports = BasePage.extend({
             chatState: state
         });
     },
-    sendChat: function () {
+    sendChat: function (imageURl) {
         var message;
-        var val = this.$chatInput.val();
-
+        if(imageURl){
+            var val = imageURl; 
+        }else{
+            var val = this.$chatInput.val();
+        }
         if (val) {
             this.staydown.intend_down = true;
 
@@ -325,6 +330,73 @@ module.exports = BasePage.extend({
         }
         return false;
     },
+    handleMediaClick: function(e){
+        e.preventDefault();
+        var self = this;
+        console.log(this.model.topResource);
+        var file;
+        if (e.dataTransfer) {
+            file = e.dataTransfer.files[0];
+        } else if (e.target.files) {
+            file = e.target.files[0];
+        } else {
+            return;
+        }
+
+        if (file.type.match('image.*')) {
+            var downloadURL = URL.createObjectURL(file);
+            console.log('Offering:', file.name, file.size, file.type, file.lastModifiedDate,  downloadURL);
+            
+            var fileTracker = new FileReader();
+          
+            fileTracker.onload = function () {
+            console.log('file', file.name, file.size, file.type, file.lastModifiedDate);
+            var data =  this.result;        
+            var b64Data = data.split(',')[1];
+            var buf = Buffer.from(b64Data,'base64');
+                   
+            var message = {
+                    from:me.jid,
+                    id:client.nextId(),
+                    to: SERVER_CONFIG.uploadDirectory,       
+                    type: 'get',
+                    request: {
+                        filename: file.name,
+                        size: buf.length,
+                        'content-type':'image/png'                                                                                                                                   
+                    }
+                };
+
+            client.mediaPushService(message , function (err,result) {  
+                var imageURl = result.uploadSlot.put;              
+                console.log('put url:' + result.uploadSlot.put);
+                let header = new Headers({
+                    'Access-Control-Expose-Headers' : 'Access-Control-*',
+                    'Access-Control-Allow-Headers': 'Content-Type, Origin, X-Requested-With',
+                    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS, HEAD',
+                    'Access-Control-Allow-Origin': '*',                    
+                    'Content-Type': 'text/plain'
+                });  
+                fetch(imageURl, {
+                  method: 'PUT',
+                   mode: 'cors',
+                   header : header,
+                   body:  buf
+                });
+                if(result){
+                    console.log('file uploaded');
+                    self.sendChat(imageURl);  
+                    $("#files").val('');                       
+                }
+                if(err)console.error(err);
+                
+            }).catch(function (err) {
+                console.log('file not uploaded');
+            });            
+        }
+         fileTracker.readAsDataURL(file);
+        }        
+    },  
     handleEndClick: function (e) {
         e.preventDefault();
         var condition = 'success';
