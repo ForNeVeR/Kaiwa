@@ -113,10 +113,12 @@ be made. After that, the Kaiwa client should connect fine.
 
 ## Installing using docker
 
-    $ git clone https://github.com/ForNeVeR/kaiwa.git
-    $ cd kaiwa
-    $ cp dev_config.example.json dev_config.json # and edit the file
-    $ docker-compose up
+```console
+$ git clone https://github.com/ForNeVeR/kaiwa.git
+$ cd kaiwa
+$ cp config.example.json config.json # and edit the file
+$ docker-compose up
+```
 
 ## Configuration
 
