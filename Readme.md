@@ -2,8 +2,6 @@ Kaiwa [![Travis build status][badge-travis]][build-travis] [![Appveyor build sta
 =====
 Kaiwa is an open source web client for XMPP.
 
-Our production server is http://chat.jabber.ru
-
 Alpha version is always hosted on http://kaiwa.fornever.me (**warning: there may
 be highly unstable code there, you're recommended to use test accounts with this
 server**).
@@ -113,6 +111,13 @@ resolve that, visit the XMPP over Websocket URL directly (eg,
 `example.com:5281/xmpp-websocket` for Prosody) so that a client cert choice can
 be made. After that, the Kaiwa client should connect fine.
 
+## Installing using docker
+
+    $ git clone https://github.com/ForNeVeR/kaiwa.git
+    $ cd kaiwa
+    $ cp dev_config.example.json dev_config.json # and edit the file
+    $ docker-compose up
+
 ## Configuration
 
 Application configuration is taken from `config.json` file. Server configuration
@@ -137,8 +142,7 @@ authentication enabled Kaiwa will try to save only salted data. The secure mode
 
 ## Troubleshooting
 
-Feel free to [report an issue][issues] or contact the maintainer directly
-through [email][fornever-email] or [XMPP][fornever-xmpp].
+Feel free to [report any issues][issues] you encounter with the project.
 
 ### Debug logging
 
@@ -156,10 +160,6 @@ After that you'll see all XMPP traffic in your console.
 Please note that we're using [tslint][] here. All the contributions should pass
 the lint. Execute `npm run lint` to check current code.
 
-[build-travis]: https://travis-ci.org/ForNeVeR/Kaiwa
-[build-appveyor]: https://ci.appveyor.com/project/ForNeVeR/kaiwa/branch/develop
-[fornever-email]: mailto:friedrich@fornever.me
-[fornever-xmpp]: xmpp:fornever@codingteam.org.ru
 [issues]: https://github.com/ForNeVeR/kaiwa/issues
 [master]: https://github.com/ForNeVeR/kaiwa/tree/master
 [node-js]: https://nodejs.org/
