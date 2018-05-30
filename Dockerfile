@@ -9,11 +9,11 @@ COPY package*.json ./
 ENV NODE_ENV development
 RUN npm install
 
-COPY dev_config.json ./
+COPY config.json ./
 
 COPY . .
 
-RUN npm run compile
+RUN npm run webpack
 
 EXPOSE 8000
 CMD [ "npm", "start" ]
